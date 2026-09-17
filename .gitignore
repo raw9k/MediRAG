@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Environment
+.env
+.venv/
+venv/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Vector database
+vectorstore/
+
+# IDE
+.vscode/
+
+# OS
+.DS_Store
