@@ -119,7 +119,7 @@ Content-Type: application/json
 ### Install
 
 ```bash
-git clone <your-repository-url>
+git clone https://github.com/raw9k/MediRAG
 cd MediRAG
 
 python -m venv .venv
