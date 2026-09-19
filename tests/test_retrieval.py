@@ -52,3 +52,17 @@ def test_retrieval_returns_relevant_documents():
     )
 
     assert "diabetes" in combined_text
+    
+def test_out_of_context_question():
+    from app.rag.pipeline import answer_question
+
+    answer, sources = answer_question(
+        "What is the capital of France?"
+    )
+
+    assert (
+        "does not provide enough information"
+        in answer.lower()
+    )
+
+    assert sources == []

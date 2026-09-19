@@ -3,11 +3,19 @@ from langchain_community.vectorstores import FAISS
 from app.embeddings.embedder import get_embedding_model
 from app.llm.groq import generate_answer
 
+
 VECTORSTORE_PATH = "vectorstore"
 
-# Load once when the application imports this module
+MEDICAL_DISCLAIMER = (
+    "This information is for educational purposes only and is not "
+    "a substitute for professional medical advice, diagnosis, or treatment."
+)
+
+
+# Load embedding model once when the application imports this module
 embedding_model = get_embedding_model()
 
+# Load FAISS vector store once
 vector_store = FAISS.load_local(
     VECTORSTORE_PATH,
     embedding_model,
@@ -18,8 +26,12 @@ vector_store = FAISS.load_local(
 def retrieve_documents(
     question: str,
     k: int = 3,
-    score_threshold: float = 0.8,
+    score_threshold: float = 0.80,
 ):
+    """
+    Retrieve relevant documents using FAISS similarity search
+    and filter out documents above the distance threshold.
+    """
     results = vector_store.similarity_search_with_score(
         question,
         k=k,
@@ -35,6 +47,9 @@ def retrieve_documents(
 
 
 def build_context(documents) -> str:
+    """
+    Build the context passed to the LLM.
+    """
     return "\n\n".join(
         f"Source page: {doc.metadata.get('page')}\n"
         f"{doc.page_content}"
@@ -43,6 +58,9 @@ def build_context(documents) -> str:
 
 
 def build_sources(documents) -> list[str]:
+    """
+    Build human-readable source references.
+    """
     sources = []
 
     for document in documents:
@@ -57,11 +75,20 @@ def build_sources(documents) -> list[str]:
 
 
 def answer_question(question: str, k: int = 3):
-    documents = retrieve_documents(question, k=k)
+    """
+    Retrieve relevant medical context and generate
+    an evidence-grounded answer.
+    """
+    documents = retrieve_documents(
+        question,
+        k=k,
+    )
 
+    # Handle questions for which the knowledge base
+    # does not contain sufficiently relevant information.
     if not documents:
         return (
-            "The available medical context does not contain enough "
+            "The available medical context does not provide enough "
             "information to answer this question.",
             [],
         )
@@ -72,6 +99,9 @@ def answer_question(question: str, k: int = 3):
         context=context,
         question=question,
     )
+
+    # Add a deterministic medical disclaimer.
+    answer = f"{answer}\n\n{MEDICAL_DISCLAIMER}"
 
     sources = build_sources(documents)
 
