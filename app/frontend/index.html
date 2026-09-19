@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
 
     <meta
@@ -10,58 +9,349 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>MediRAG</title>
+    <title>MediRAG AI</title>
+
+    <meta
+        name="description"
+        content="MediRAG — AI-powered medical information assistant grounded in medical literature."
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
+
+    <link
+        rel="preconnect"
+        href="https://fonts.gstatic.com"
+        crossorigin
+    >
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap"
+        rel="stylesheet"
+    >
 
     <link
         rel="stylesheet"
         href="/static/style.css"
     >
-
 </head>
-
 
 <body>
 
-    <div class="app-container">
+    <div class="background-glow glow-one"></div>
+    <div class="background-glow glow-two"></div>
 
-        <header class="header">
+    <div class="app-shell">
 
-            <div>
+        <!-- Sidebar -->
+        <aside class="sidebar">
 
-                <h1>MediRAG</h1>
+            <div class="brand">
+                <div class="brand-icon">
+                    <span>✚</span>
+                </div>
 
-                <p>
-                    Medical information assistant powered by RAG
-                </p>
+                <div>
+                    <div class="brand-name">
+                        MediRAG
+                    </div>
+
+                    <div class="brand-subtitle">
+                        Medical AI Assistant
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-divider"></div>
+
+            <button
+                class="new-chat-button"
+                id="new-chat-button"
+            >
+                <span class="button-icon">＋</span>
+                <span>New conversation</span>
+            </button>
+
+            <div class="sidebar-section">
+
+                <div class="sidebar-label">
+                    ABOUT
+                </div>
+
+                <div class="info-card">
+
+                    <div class="info-icon">
+                        ✦
+                    </div>
+
+                    <div>
+                        <strong>Evidence grounded</strong>
+
+                        <p>
+                            Answers are generated using
+                            retrieved medical literature.
+                        </p>
+                    </div>
+
+                </div>
 
             </div>
 
+            <div class="sidebar-section">
 
-            <span class="status">
-                ● Online
-            </span>
+                <div class="sidebar-label">
+                    SAFETY
+                </div>
 
-        </header>
+                <div class="safety-card">
 
+                    <div class="status-dot"></div>
 
-        <main class="chat-container">
-
-            <div
-                id="chat-messages"
-                class="chat-messages"
-            >
-
-                <div class="message assistant-message">
-
-                    <div class="message-content">
-
-                        <strong>MediRAG</strong>
+                    <div>
+                        <strong>Educational use</strong>
 
                         <p>
-                            Hello! Ask me a medical question and I
-                            will answer using the available medical
-                            knowledge base.
+                            Not a replacement for professional
+                            medical advice.
                         </p>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="sidebar-footer">
+
+                <div class="sidebar-footer-text">
+                    MediRAG v1.0
+                </div>
+
+                <button
+                    class="icon-button"
+                    id="theme-toggle"
+                    title="Toggle theme"
+                >
+                    ☾
+                </button>
+
+            </div>
+
+        </aside>
+
+
+        <!-- Main Application -->
+        <main class="main-content">
+
+            <!-- Top Bar -->
+            <header class="topbar">
+
+                <div class="topbar-left">
+
+                    <div class="mobile-brand">
+                        <div class="brand-icon small">
+                            ✚
+                        </div>
+
+                        <span>MediRAG</span>
+                    </div>
+
+                    <div class="connection-status">
+                        <span class="live-dot"></span>
+                        <span>Medical knowledge base connected</span>
+                    </div>
+
+                </div>
+
+                <div class="topbar-actions">
+
+                    <a
+                        href="/docs"
+                        class="docs-button"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title="Open API documentation"
+                    >
+                        <span>⌘</span>
+                        <span>API Docs</span>
+                    </a>
+
+                    <button
+                        class="clear-button"
+                        id="clear-chat"
+                        title="Clear conversation"
+                    >
+                        <span>⌫</span>
+                        <span>Clear</span>
+                    </button>
+
+                </div>
+
+            </header>
+
+
+            <!-- Chat Area -->
+            <section
+                class="chat-container"
+                id="chat-messages"
+            >
+
+                <!-- Welcome Screen -->
+                <div
+                    class="welcome-screen"
+                    id="welcome-screen"
+                >
+
+                    <div class="welcome-icon">
+
+                        <div class="pulse-ring"></div>
+
+                        <div class="medical-symbol">
+                            ✚
+                        </div>
+
+                    </div>
+
+                    <div class="welcome-badge">
+                        AI • RAG • Medical Knowledge
+                    </div>
+
+                    <h1>
+                        Your medical knowledge,
+                        <span>grounded in evidence.</span>
+                    </h1>
+
+                    <p class="welcome-description">
+                        Ask questions about medical conditions,
+                        symptoms, prevention and general health
+                        information. MediRAG retrieves relevant
+                        information from its medical knowledge base
+                        before generating an answer.
+                    </p>
+
+
+                    <div class="suggestion-grid">
+
+                        <button
+                            class="suggestion-card"
+                            data-question="What are the symptoms of diabetes?"
+                        >
+                            <div class="suggestion-icon blue">
+                                ◉
+                            </div>
+
+                            <div>
+                                <strong>Explore symptoms</strong>
+
+                                <span>
+                                    What are the symptoms of diabetes?
+                                </span>
+                            </div>
+
+                            <span class="suggestion-arrow">→</span>
+                        </button>
+
+
+                        <button
+                            class="suggestion-card"
+                            data-question="What causes diabetes?"
+                        >
+                            <div class="suggestion-icon purple">
+                                ◈
+                            </div>
+
+                            <div>
+                                <strong>Understand causes</strong>
+
+                                <span>
+                                    What causes diabetes?
+                                </span>
+                            </div>
+
+                            <span class="suggestion-arrow">→</span>
+                        </button>
+
+
+                        <button
+                            class="suggestion-card"
+                            data-question="How can diabetes be prevented?"
+                        >
+                            <div class="suggestion-icon green">
+                                ✓
+                            </div>
+
+                            <div>
+                                <strong>Learn prevention</strong>
+
+                                <span>
+                                    How can diabetes be prevented?
+                                </span>
+                            </div>
+
+                            <span class="suggestion-arrow">→</span>
+                        </button>
+
+
+                        <button
+                            class="suggestion-card"
+                            data-question="What is type 2 diabetes?"
+                        >
+                            <div class="suggestion-icon orange">
+                                ?
+                            </div>
+
+                            <div>
+                                <strong>Learn about conditions</strong>
+
+                                <span>
+                                    What is type 2 diabetes?
+                                </span>
+                            </div>
+
+                            <span class="suggestion-arrow">→</span>
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- Composer -->
+            <div class="composer-area">
+
+                <div class="composer-wrapper">
+
+                    <div class="composer">
+
+                        <textarea
+                            id="question-input"
+                            rows="1"
+                            maxlength="2000"
+                            placeholder="Ask a medical question..."
+                        ></textarea>
+
+                        <button
+                            id="send-button"
+                            class="send-button"
+                            title="Send message"
+                        >
+                            <span>↑</span>
+                        </button>
+
+                    </div>
+
+                    <div class="composer-footer">
+
+                        <span>
+                            Enter to send • Shift + Enter for new line
+                        </span>
+
+                        <span>
+                            Educational information only
+                        </span>
 
                     </div>
 
@@ -69,39 +359,15 @@
 
             </div>
 
-
-            <div class="input-area">
-
-                <textarea
-                    id="question-input"
-                    placeholder="Ask a medical question..."
-                    rows="1"
-                ></textarea>
-
-
-                <button id="send-button">
-                    Send
-                </button>
-
-            </div>
-
         </main>
-
-
-        <footer>
-
-            <p>
-                For educational purposes only. Not a substitute for
-                professional medical advice, diagnosis, or treatment.
-            </p>
-
-        </footer>
 
     </div>
 
 
+    <!-- Markdown -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
+    <!-- Sanitization -->
     <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
 
     <script src="/static/script.js"></script>
