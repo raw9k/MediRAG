@@ -2,3 +2,6 @@ langchain
 langchain-community
 langchain-text-splitters
 pypdf
+pytest
+langchain-huggingface 
+sentence-transformers

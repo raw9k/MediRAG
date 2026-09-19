@@ -1,9 +1,12 @@
 # Python
 __pycache__/
 *.py[cod]
+*.pyo
+*.pyd
 
 # Environment
 .env
+.env.*
 .venv/
 venv/
 
@@ -12,9 +15,30 @@ venv/
 
 # Vector database
 vectorstore/
+faiss_index/
+data/vectorstore/
+
+# Raw / large data
+data/raw/
+data/processed/
+
+# Hugging Face / ML caches
+.cache/
+huggingface/
+.cache/huggingface/
 
 # IDE
 .vscode/
+.idea/
 
 # OS
 .DS_Store
+Thumbs.db
+
+# Testing / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Logs
+*.log
