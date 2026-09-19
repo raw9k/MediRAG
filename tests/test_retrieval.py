@@ -82,3 +82,33 @@ def test_hello_response():
 
     assert "hello" in answer.lower()
     assert sources == []
+    
+def test_follow_up_question_with_history():
+    from app.rag.pipeline import answer_question
+
+    history = [
+        {
+            "role": "user",
+            "content": "What are the symptoms of diabetes?",
+        },
+        {
+            "role": "assistant",
+            "content": (
+                "Diabetes can cause excessive thirst "
+                "and frequent urination."
+            ),
+        },
+    ]
+
+    answer, sources = answer_question(
+        question="How can it be prevented?",
+        history=history,
+    )
+
+    assert isinstance(answer, str)
+    assert len(answer) > 0
+
+    assert "does not provide enough information" not in answer.lower()
+
+    assert isinstance(sources, list)
+    assert len(sources) > 0

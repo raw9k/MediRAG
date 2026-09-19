@@ -50,7 +50,16 @@ def chat_page():
 @app.post("/ask", response_model=QuestionResponse)
 def ask_question(request: QuestionRequest):
     try:
-        answer, sources = answer_question(request.question)
+        answer, sources = answer_question(
+            question=request.question,
+            history=[
+                {
+                    "role": message.role,
+                    "content": message.content,
+                }
+                for message in request.history
+            ],
+        )
 
         return QuestionResponse(
             answer=answer,

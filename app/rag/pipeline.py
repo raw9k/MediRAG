@@ -3,6 +3,7 @@ from langchain_community.vectorstores import FAISS
 from app.embeddings.embedder import get_embedding_model
 from app.llm.groq import generate_answer
 from app.rag.intent import get_greeting_response
+from app.rag.query_rewriter import rewrite_query
 
 VECTORSTORE_PATH = "vectorstore"
 
@@ -73,15 +74,25 @@ def build_sources(documents) -> list[str]:
 
     return list(dict.fromkeys(sources))
 
-
-def answer_question(question: str, k: int = 3):
+def answer_question(
+    question: str,
+    history: list[dict] | None = None,
+    k: int = 3,
+):
     greeting_response = get_greeting_response(question)
 
     if greeting_response:
         return greeting_response, []
 
+    history = history or []
+
+    search_query = rewrite_query(
+        question=question,
+        history=history,
+    )
+
     documents = retrieve_documents(
-        question,
+        search_query,
         k=k,
     )
 
