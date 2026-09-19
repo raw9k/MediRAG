@@ -1,8 +1,7 @@
-from fastapi import FastAPI
-from pydantic import BaseModel
+from fastapi import FastAPI, HTTPException
+from pydantic import BaseModel, Field
 
 from app.rag.pipeline import answer_question
-
 
 app = FastAPI(
     title="MediRAG API",
@@ -12,7 +11,7 @@ app = FastAPI(
 
 
 class QuestionRequest(BaseModel):
-    question: str
+    question: str = Field(..., min_length=3)
 
 
 class QuestionResponse(BaseModel):
@@ -22,16 +21,26 @@ class QuestionResponse(BaseModel):
 
 @app.get("/")
 def root():
-    return {
-        "message": "MediRAG API is running"
-    }
+    return {"message": "MediRAG API is running"}
+
+
+@app.get("/health")
+def health_check():
+    return {"status": "healthy"}
 
 
 @app.post("/ask", response_model=QuestionResponse)
 def ask_question(request: QuestionRequest):
-    answer, sources = answer_question(request.question)
+    try:
+        answer, sources = answer_question(request.question)
 
-    return QuestionResponse(
-        answer=answer,
-        sources=sources,
-    )
+        return QuestionResponse(
+            answer=answer,
+            sources=sources,
+        )
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to generate answer: {str(e)}",
+        )
