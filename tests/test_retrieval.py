@@ -40,7 +40,7 @@ def test_retrieval_returns_relevant_documents():
     results = retrieve_documents(
         "What are the symptoms of diabetes?",
         k=5,
-        score_threshold=0.80,
+        score_threshold=0.85,
     )
 
     assert len(results) > 0

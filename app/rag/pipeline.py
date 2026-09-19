@@ -27,7 +27,7 @@ vector_store = FAISS.load_local(
 def retrieve_documents(
     question: str,
     k: int = 3,
-    score_threshold: float = 0.80,
+    score_threshold: float = 0.85,
 ):
     candidate_k = max(k * 3, 10)
 
