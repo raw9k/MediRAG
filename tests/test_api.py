@@ -39,3 +39,20 @@ def test_ask_endpoint_rejects_short_question():
     )
 
     assert response.status_code == 422
+    
+def test_ask_endpoint_rejects_out_of_context_question():
+    response = client.post(
+        "/ask",
+        json={"question": "What is the capital of France?"},
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert (
+        "does not provide enough information"
+        in data["answer"].lower()
+    )
+
+    assert data["sources"] == []
