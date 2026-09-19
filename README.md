@@ -25,7 +25,7 @@ The application provides:
 ## Architecture
 
 ```mermaid
-flowchart LR
+flowchart TD
     U[User] --> UI[Web chat interface]
     UI --> API[FastAPI /ask]
     API --> I{Greeting?}
