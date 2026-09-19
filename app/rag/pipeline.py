@@ -29,34 +29,54 @@ def retrieve_documents(
     k: int = 3,
     score_threshold: float = 0.80,
 ):
-    """
-    Retrieve relevant documents using FAISS similarity search
-    and filter out documents above the distance threshold.
-    """
+    candidate_k = max(k * 3, 10)
+
     results = vector_store.similarity_search_with_score(
         question,
-        k=k,
+        k=candidate_k,
     )
 
-    documents = [
-        document
-        for document, score in results
-        if score <= score_threshold
-    ]
+    documents = []
+
+    seen_pages = set()
+
+    for document, score in results:
+        if score > score_threshold:
+            continue
+
+        page = document.metadata.get("page")
+
+        # Avoid returning multiple chunks from the same page.
+        if page in seen_pages:
+            continue
+
+        seen_pages.add(page)
+        documents.append(document)
+
+        if len(documents) >= k:
+            break
 
     return documents
 
-
 def build_context(documents) -> str:
-    """
-    Build the context passed to the LLM.
-    """
-    return "\n\n".join(
-        f"Source page: {doc.metadata.get('page')}\n"
-        f"{doc.page_content}"
-        for doc in documents
-    )
+    context_parts = []
 
+    for index, document in enumerate(documents, start=1):
+        page = document.metadata.get("page")
+
+        if page is not None:
+            page_number = page + 1
+        else:
+            page_number = "Unknown"
+
+        context_parts.append(
+            f"SOURCE {index}\n"
+            f"Page: {page_number}\n"
+            f"{'-' * 40}\n"
+            f"{document.page_content.strip()}"
+        )
+
+    return "\n\n".join(context_parts)
 
 def build_sources(documents) -> list[str]:
     """

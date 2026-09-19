@@ -112,3 +112,42 @@ def test_follow_up_question_with_history():
 
     assert isinstance(sources, list)
     assert len(sources) > 0
+    
+def test_retrieval_returns_unique_pages():
+    from app.rag.pipeline import retrieve_documents
+
+    documents = retrieve_documents(
+        "What are the symptoms of diabetes?",
+        k=3,
+    )
+
+    pages = [
+        document.metadata.get("page")
+        for document in documents
+    ]
+
+    assert len(pages) == len(set(pages))
+    
+def test_context_contains_source_information():
+    from langchain_core.documents import Document
+    from app.rag.pipeline import build_context
+
+    documents = [
+        Document(
+            page_content="Diabetes may cause excessive thirst.",
+            metadata={"page": 436},
+        ),
+        Document(
+            page_content="Frequent urination is another symptom.",
+            metadata={"page": 437},
+        ),
+    ]
+
+    context = build_context(documents)
+
+    assert "SOURCE 1" in context
+    assert "SOURCE 2" in context
+    assert "Page: 437" in context
+    assert "Page: 438" in context
+    assert "Diabetes may cause excessive thirst." in context
+    assert "Frequent urination is another symptom." in context
