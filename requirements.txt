@@ -6,3 +6,5 @@ pytest
 langchain-huggingface 
 sentence-transformers
 faiss-cpu
+openai
+python-dotenv
