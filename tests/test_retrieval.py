@@ -32,3 +32,23 @@ def test_diabetes_retrieval():
 
     assert "symptoms" in combined_text
     assert "diabetes" in combined_text
+    
+    
+def test_retrieval_returns_relevant_documents():
+    from app.rag.pipeline import retrieve_documents
+
+    results = retrieve_documents(
+        "What are the symptoms of diabetes?",
+        k=5,
+        score_threshold=0.80,
+    )
+
+    assert len(results) > 0
+    assert len(results) <= 5
+
+    combined_text = " ".join(
+        document.page_content.lower()
+        for document in results
+    )
+
+    assert "diabetes" in combined_text

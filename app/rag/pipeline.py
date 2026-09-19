@@ -3,9 +3,7 @@ from langchain_community.vectorstores import FAISS
 from app.embeddings.embedder import get_embedding_model
 from app.llm.groq import generate_answer
 
-
 VECTORSTORE_PATH = "vectorstore"
-
 
 # Load once when the application imports this module
 embedding_model = get_embedding_model()
@@ -17,8 +15,23 @@ vector_store = FAISS.load_local(
 )
 
 
-def retrieve_documents(question: str, k: int = 3):
-    return vector_store.similarity_search(question, k=k)
+def retrieve_documents(
+    question: str,
+    k: int = 3,
+    score_threshold: float = 0.8,
+):
+    results = vector_store.similarity_search_with_score(
+        question,
+        k=k,
+    )
+
+    documents = [
+        document
+        for document, score in results
+        if score <= score_threshold
+    ]
+
+    return documents
 
 
 def build_context(documents) -> str:
@@ -45,6 +58,13 @@ def build_sources(documents) -> list[str]:
 
 def answer_question(question: str, k: int = 3):
     documents = retrieve_documents(question, k=k)
+
+    if not documents:
+        return (
+            "The available medical context does not contain enough "
+            "information to answer this question.",
+            [],
+        )
 
     context = build_context(documents)
 
