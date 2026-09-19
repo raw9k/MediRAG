@@ -2,6 +2,9 @@ const input = document.getElementById("question-input");
 const sendButton = document.getElementById("send-button");
 const chatMessages = document.getElementById("chat-messages");
 
+// Store conversation history in the browser
+let conversationHistory = [];
+
 
 function addMessage(message, type) {
     const messageWrapper = document.createElement("div");
@@ -84,6 +87,7 @@ function addLoadingMessage() {
     const messageWrapper = document.createElement("div");
 
     messageWrapper.className = "message assistant-message";
+
     messageWrapper.id = "loading-message";
 
 
@@ -107,7 +111,9 @@ function addLoadingMessage() {
 
 
 function removeLoadingMessage() {
-    const loadingMessage = document.getElementById("loading-message");
+    const loadingMessage = document.getElementById(
+        "loading-message"
+    );
 
     if (loadingMessage) {
         loadingMessage.remove();
@@ -125,7 +131,7 @@ async function sendMessage() {
     }
 
 
-    // Display user question
+    // Display the user's question
     addMessage(question, "user");
 
 
@@ -133,12 +139,13 @@ async function sendMessage() {
     input.value = "";
 
 
-    // Disable button while processing
+    // Disable input while processing
     sendButton.disabled = true;
+
     sendButton.textContent = "Thinking...";
 
 
-    // Show loading message
+    // Show loading indicator
     addLoadingMessage();
 
 
@@ -152,7 +159,8 @@ async function sendMessage() {
             },
 
             body: JSON.stringify({
-                question: question
+                question: question,
+                history: conversationHistory
             })
         });
 
@@ -171,11 +179,24 @@ async function sendMessage() {
         removeLoadingMessage();
 
 
-        // Display RAG response
+        // Display assistant response
         addAssistantResponse(
             data.answer,
             data.sources
         );
+
+
+        // Store the conversation after successful response
+        conversationHistory.push({
+            role: "user",
+            content: question
+        });
+
+
+        conversationHistory.push({
+            role: "assistant",
+            content: data.answer
+        });
 
 
     } catch (error) {
@@ -210,8 +231,8 @@ sendButton.addEventListener(
 );
 
 
-// Enter to send
-// Shift + Enter creates a new line
+// Enter → send
+// Shift + Enter → new line
 input.addEventListener(
     "keydown",
     (event) => {

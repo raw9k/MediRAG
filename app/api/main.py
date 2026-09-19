@@ -19,8 +19,14 @@ app.mount(
     name="static",
 )
 
+class ChatMessage(BaseModel):
+    role: str
+    content: str
+
+
 class QuestionRequest(BaseModel):
     question: str = Field(..., min_length=3)
+    history: list[ChatMessage] = []
 
 
 class QuestionResponse(BaseModel):

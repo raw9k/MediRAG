@@ -66,3 +66,19 @@ def test_out_of_context_question():
     )
 
     assert sources == []
+    
+def test_greeting_response():
+    from app.rag.pipeline import answer_question
+
+    answer, sources = answer_question("hi")
+
+    assert "hello" in answer.lower()
+    assert sources == []
+    
+def test_hello_response():
+    from app.rag.pipeline import answer_question
+
+    answer, sources = answer_question("hello")
+
+    assert "hello" in answer.lower()
+    assert sources == []

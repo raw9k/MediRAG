@@ -2,7 +2,7 @@ from langchain_community.vectorstores import FAISS
 
 from app.embeddings.embedder import get_embedding_model
 from app.llm.groq import generate_answer
-
+from app.rag.intent import get_greeting_response
 
 VECTORSTORE_PATH = "vectorstore"
 
@@ -75,17 +75,16 @@ def build_sources(documents) -> list[str]:
 
 
 def answer_question(question: str, k: int = 3):
-    """
-    Retrieve relevant medical context and generate
-    an evidence-grounded answer.
-    """
+    greeting_response = get_greeting_response(question)
+
+    if greeting_response:
+        return greeting_response, []
+
     documents = retrieve_documents(
         question,
         k=k,
     )
 
-    # Handle questions for which the knowledge base
-    # does not contain sufficiently relevant information.
     if not documents:
         return (
             "The available medical context does not provide enough "
@@ -100,7 +99,6 @@ def answer_question(question: str, k: int = 3):
         question=question,
     )
 
-    # Add a deterministic medical disclaimer.
     answer = f"{answer}\n\n{MEDICAL_DISCLAIMER}"
 
     sources = build_sources(documents)

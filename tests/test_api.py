@@ -56,3 +56,29 @@ def test_ask_endpoint_rejects_out_of_context_question():
     )
 
     assert data["sources"] == []
+    
+    
+def test_ask_endpoint_accepts_history():
+    response = client.post(
+        "/ask",
+        json={
+            "question": "What about type 2?",
+            "history": [
+                {
+                    "role": "user",
+                    "content": "What are the symptoms of diabetes?",
+                },
+                {
+                    "role": "assistant",
+                    "content": "Diabetes can cause excessive thirst and frequent urination.",
+                },
+            ],
+        },
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert "answer" in data
+    assert "sources" in data
