@@ -12,8 +12,6 @@ def get_embedding_model():
     )
     
     
-    
-    
 if __name__ == "__main__":
     embedding_model = get_embedding_model()
 
