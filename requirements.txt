@@ -3,8 +3,9 @@ langchain-community
 langchain-text-splitters
 pypdf
 pytest
-langchain-huggingface 
-sentence-transformers
+langchain-huggingface
+sentence-transformers==6.1.0
+transformers==5.17.0
 faiss-cpu
 openai
 python-dotenv
