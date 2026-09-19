@@ -1,6 +1,9 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
+from pathlib import Path
 
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from app.rag.pipeline import answer_question
 
 app = FastAPI(
@@ -8,7 +11,13 @@ app = FastAPI(
     description="Medical question answering API using RAG.",
     version="1.0.0",
 )
+FRONTEND_DIR = Path(__file__).resolve().parent.parent / "frontend"
 
+app.mount(
+    "/static",
+    StaticFiles(directory=FRONTEND_DIR),
+    name="static",
+)
 
 class QuestionRequest(BaseModel):
     question: str = Field(..., min_length=3)
@@ -28,6 +37,9 @@ def root():
 def health_check():
     return {"status": "healthy"}
 
+@app.get("/chat")
+def chat_page():
+    return FileResponse(FRONTEND_DIR / "index.html")
 
 @app.post("/ask", response_model=QuestionResponse)
 def ask_question(request: QuestionRequest):

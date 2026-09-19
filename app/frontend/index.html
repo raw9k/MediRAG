@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>MediRAG</title>
+
+    <link
+        rel="stylesheet"
+        href="/static/style.css"
+    >
+
+</head>
+
+
+<body>
+
+    <div class="app-container">
+
+        <header class="header">
+
+            <div>
+
+                <h1>MediRAG</h1>
+
+                <p>
+                    Medical information assistant powered by RAG
+                </p>
+
+            </div>
+
+
+            <span class="status">
+                ● Online
+            </span>
+
+        </header>
+
+
+        <main class="chat-container">
+
+            <div
+                id="chat-messages"
+                class="chat-messages"
+            >
+
+                <div class="message assistant-message">
+
+                    <div class="message-content">
+
+                        <strong>MediRAG</strong>
+
+                        <p>
+                            Hello! Ask me a medical question and I
+                            will answer using the available medical
+                            knowledge base.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="input-area">
+
+                <textarea
+                    id="question-input"
+                    placeholder="Ask a medical question..."
+                    rows="1"
+                ></textarea>
+
+
+                <button id="send-button">
+                    Send
+                </button>
+
+            </div>
+
+        </main>
+
+
+        <footer>
+
+            <p>
+                For educational purposes only. Not a substitute for
+                professional medical advice, diagnosis, or treatment.
+            </p>
+
+        </footer>
+
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.6/dist/purify.min.js"></script>
+
+    <script src="/static/script.js"></script>
+
+</body>
+
+</html>
