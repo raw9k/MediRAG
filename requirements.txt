@@ -5,3 +5,4 @@ pypdf
 pytest
 langchain-huggingface 
 sentence-transformers
+faiss-cpu
